@@ -35,12 +35,15 @@ html, body {
   background: rgba(0, 0, 0, 0.7);
   color: white;
   z-index: 5;
+  padding: 20px;
+  box-sizing: border-box;
 }
 
 .game-info {
   text-align: center;
-  margin-bottom: 2rem;
-  max-width: 90%;
+  margin-bottom: 1.5rem;
+  max-width: 100%;
+  width: 100%;
 }
 
 .game-info h1 {
@@ -59,10 +62,11 @@ html, body {
 .grid-display {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 4px;
+  gap: 6px;
   margin: 1rem 0;
-  max-width: 300px;
+  max-width: 320px;
   width: 100%;
+  justify-self: center;
 }
 
 .grid-cell {
@@ -149,21 +153,34 @@ html, body {
 }
 
 /* Responsive design for mobile */
-@media (max-width: 480px) {
+@media (max-width: 768px) {
+  .game-overlay {
+    padding: 15px;
+  }
+  
   .game-info h1 {
     font-size: 2rem;
+    margin-bottom: 0.8rem;
   }
   
   .game-info p {
     font-size: 1rem;
+    margin-bottom: 1rem;
   }
   
   .grid-display {
-    max-width: 250px;
+    max-width: 280px;
+    gap: 4px;
   }
   
   .grid-cell {
     font-size: 1rem;
+    min-height: 50px;
+  }
+  
+  .game-status {
+    font-size: 1rem;
+    margin-top: 0.8rem;
   }
   
   .start-button,
@@ -172,6 +189,47 @@ html, body {
     padding: 14px 28px;
     font-size: 16px;
     min-width: 140px;
+    margin-top: 0.8rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .game-overlay {
+    padding: 10px;
+  }
+  
+  .game-info h1 {
+    font-size: 1.8rem;
+    margin-bottom: 0.6rem;
+  }
+  
+  .game-info p {
+    font-size: 0.9rem;
+    margin-bottom: 0.8rem;
+  }
+  
+  .grid-display {
+    max-width: 240px;
+    gap: 3px;
+  }
+  
+  .grid-cell {
+    font-size: 0.9rem;
+    min-height: 45px;
+  }
+  
+  .game-status {
+    font-size: 0.9rem;
+    margin-top: 0.6rem;
+  }
+  
+  .start-button,
+  .retry-button,
+  .new-game-button {
+    padding: 12px 24px;
+    font-size: 14px;
+    min-width: 120px;
+    margin-top: 0.6rem;
   }
 }
 
