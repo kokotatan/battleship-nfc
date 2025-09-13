@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>BATTLESHIP NFC GAME</title>
+    <link rel="stylesheet" href="/src/styles.css" />
+  </head>
+  <body>
+    <div class="game-container">
+      <img src="/public/start-screen.jpg" alt="Battleship Game Start" class="game-image" />
+      <div class="game-overlay">
+        <div class="game-info">
+          <h1>BATTLESHIP NFC GAME</h1>
+          <p>4×4グリッドで戦艦を探せ！</p>
+          <div class="grid-display" id="gridDisplay"></div>
+          <div class="game-status" id="gameStatus"></div>
+        </div>
+        <button id="startButton" class="start-button">START GAME</button>
+      </div>
+    </div>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>
