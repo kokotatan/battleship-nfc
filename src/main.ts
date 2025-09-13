@@ -5,26 +5,42 @@ class StartScreen {
   private gridDisplay: HTMLDivElement;
   private gameStatus: HTMLDivElement;
   private gameManager: GameManager;
+  private resultModal: HTMLDivElement;
+  private resultIcon: HTMLDivElement;
+  private resultTitle: HTMLHeadingElement;
+  private resultMessage: HTMLParagraphElement;
+  private continueButton: HTMLButtonElement;
 
   constructor() {
     this.startButton = document.getElementById('startButton') as HTMLButtonElement;
     this.gridDisplay = document.getElementById('gridDisplay') as HTMLDivElement;
     this.gameStatus = document.getElementById('gameStatus') as HTMLDivElement;
+    this.resultModal = document.getElementById('resultModal') as HTMLDivElement;
+    this.resultIcon = document.getElementById('resultIcon') as HTMLDivElement;
+    this.resultTitle = document.getElementById('resultTitle') as HTMLHeadingElement;
+    this.resultMessage = document.getElementById('resultMessage') as HTMLParagraphElement;
+    this.continueButton = document.getElementById('continueButton') as HTMLButtonElement;
     this.gameManager = new GameManager();
     
     console.log('Elements found:', {
       startButton: !!this.startButton,
       gridDisplay: !!this.gridDisplay,
-      gameStatus: !!this.gameStatus
+      gameStatus: !!this.gameStatus,
+      resultModal: !!this.resultModal
     });
     
     this.initializeEventListeners();
     this.updateDisplay();
+    this.checkForNfcResult();
   }
 
   private initializeEventListeners(): void {
     this.startButton.addEventListener('click', () => {
       this.handleStartClick();
+    });
+    
+    this.continueButton.addEventListener('click', () => {
+      this.hideResultModal();
     });
   }
 
@@ -119,6 +135,77 @@ class StartScreen {
       this.gameStatus.textContent = `🎉 勝利！全${totalShips}隻の戦艦を撃沈！ (${shotsCount}発)`;
     } else {
       this.gameStatus.textContent = `発射: ${shotsCount}発 | 撃沈: ${sunkShips}/${totalShips}隻`;
+    }
+  }
+
+  private checkForNfcResult(): void {
+    // URLパラメータからNFCスキャン結果をチェック
+    const urlParams = new URLSearchParams(window.location.search);
+    const hid = urlParams.get('hid');
+    
+    if (hid) {
+      console.log('NFC scan detected, HID:', hid);
+      this.processNfcScan(hid);
+    }
+  }
+
+  private processNfcScan(hid: string): void {
+    const position = this.gameManager.hidToPosition(hid);
+    if (!position) {
+      console.error('Invalid HID format:', hid);
+      return;
+    }
+
+    try {
+      const result = this.gameManager.processShot(position);
+      this.showResult(result, position);
+    } catch (error) {
+      console.error('Error processing shot:', error);
+    }
+  }
+
+  private showResult(result: { hit: boolean; sunk: boolean; gameOver: boolean; victory: boolean }, position: { row: number; col: number }): void {
+    if (result.victory) {
+      this.showVictoryModal();
+    } else if (result.hit) {
+      this.showHitModal(result.sunk);
+    } else {
+      this.showMissModal();
+    }
+    
+    // グリッドを更新
+    this.updateDisplay();
+  }
+
+  private showHitModal(sunk: boolean): void {
+    this.resultIcon.textContent = '💥';
+    this.resultTitle.textContent = 'HIT!';
+    this.resultMessage.textContent = sunk ? '戦艦を撃沈しました！' : '戦艦に命中！';
+    this.resultModal.classList.remove('hidden');
+  }
+
+  private showMissModal(): void {
+    this.resultIcon.textContent = '❌';
+    this.resultTitle.textContent = 'MISS!';
+    this.resultMessage.textContent = '外れました。もう一度挑戦してください！';
+    this.resultModal.classList.remove('hidden');
+  }
+
+  private showVictoryModal(): void {
+    this.resultIcon.textContent = '🎉';
+    this.resultTitle.textContent = 'VICTORY!';
+    this.resultMessage.textContent = '全戦艦を撃沈！おめでとうございます！';
+    this.continueButton.textContent = 'NEW GAME';
+    this.resultModal.classList.remove('hidden');
+  }
+
+  private hideResultModal(): void {
+    this.resultModal.classList.add('hidden');
+    
+    // 勝利の場合は新しいゲームを開始
+    if (this.resultTitle.textContent === 'VICTORY!') {
+      this.gameManager.clearGameState();
+      this.updateDisplay();
     }
   }
 }
