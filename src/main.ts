@@ -11,6 +11,13 @@ class StartScreen {
     this.gridDisplay = document.getElementById('gridDisplay') as HTMLDivElement;
     this.gameStatus = document.getElementById('gameStatus') as HTMLDivElement;
     this.gameManager = new GameManager();
+    
+    console.log('Elements found:', {
+      startButton: !!this.startButton,
+      gridDisplay: !!this.gridDisplay,
+      gameStatus: !!this.gameStatus
+    });
+    
     this.initializeEventListeners();
     this.updateDisplay();
   }
@@ -22,11 +29,15 @@ class StartScreen {
   }
 
   private handleStartClick(): void {
+    console.log('START GAME button clicked');
+    
     // Initialize a new game
     this.gameManager.initializeGame();
+    console.log('Game initialized');
     
     // Update display
     this.updateDisplay();
+    console.log('Display updated');
     
     // Game started - no need for instructions since NFC is already set up
     console.log('ゲーム開始！NFCタグをスキャンしてください。');
@@ -34,12 +45,15 @@ class StartScreen {
 
   private updateDisplay(): void {
     const gameState = this.gameManager.getGameState();
+    console.log('Game state:', gameState);
     
     if (gameState) {
+      console.log('Rendering grid with game state');
       this.renderGrid(gameState);
       this.updateGameStatus(gameState);
       this.startButton.textContent = 'NEW GAME';
     } else {
+      console.log('Rendering empty grid');
       this.renderEmptyGrid();
       this.gameStatus.textContent = 'ゲームを開始してください';
       this.startButton.textContent = 'START GAME';
