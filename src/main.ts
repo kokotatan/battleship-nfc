@@ -28,12 +28,8 @@ class StartScreen {
     // Update display
     this.updateDisplay();
     
-    // Show instructions
-    this.showNfcInstructions();
-  }
-
-  private showNfcInstructions(): void {
-    alert('ゲーム開始！4×4グリッドのNFCタグをスキャンしてください。\n\nHID形式: 11, 12, 13, 14, 21, 22, 23, 24, 31, 32, 33, 34, 41, 42, 43, 44');
+    // Game started - no need for instructions since NFC is already set up
+    console.log('ゲーム開始！NFCタグをスキャンしてください。');
   }
 
   private updateDisplay(): void {
