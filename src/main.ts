@@ -42,6 +42,15 @@ class StartScreen {
     this.continueButton.addEventListener('click', () => {
       this.hideResultModal();
     });
+    
+    // テスト用ボタン
+    const testButton = document.getElementById('testModalButton');
+    if (testButton) {
+      testButton.addEventListener('click', () => {
+        console.log('Test modal button clicked');
+        this.showHitModal(false);
+      });
+    }
   }
 
   private handleStartClick(): void {
@@ -143,9 +152,15 @@ class StartScreen {
     const urlParams = new URLSearchParams(window.location.search);
     const hid = urlParams.get('hid');
     
+    console.log('Checking for NFC result, URL:', window.location.href);
+    console.log('URL params:', urlParams.toString());
+    console.log('HID found:', hid);
+    
     if (hid) {
       console.log('NFC scan detected, HID:', hid);
       this.processNfcScan(hid);
+    } else {
+      console.log('No HID parameter found');
     }
   }
 
@@ -178,10 +193,12 @@ class StartScreen {
   }
 
   private showHitModal(sunk: boolean): void {
+    console.log('Showing hit modal, sunk:', sunk);
     this.resultIcon.textContent = '💥';
     this.resultTitle.textContent = 'HIT!';
     this.resultMessage.textContent = sunk ? '戦艦を撃沈しました！' : '戦艦に命中！';
     this.resultModal.classList.remove('hidden');
+    console.log('Hit modal should be visible now');
   }
 
   private showMissModal(): void {
