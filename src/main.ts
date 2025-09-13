@@ -39,8 +39,8 @@ class StartScreen {
     this.updateDisplay();
     console.log('Display updated');
     
-    // Game started - no need for instructions since NFC is already set up
-    console.log('ゲーム開始！NFCタグをスキャンしてください。');
+    // Show alert for mobile debugging
+    alert('ゲーム開始！NFCタグをスキャンしてください。');
   }
 
   private updateDisplay(): void {
